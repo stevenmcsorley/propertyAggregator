@@ -1,8 +1,10 @@
 import axios from "axios";
-
+import { useRouter } from "next/router";
 import PriceBlock from "../components/price-block/PriceBlock";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import SideBar from "../components/side-bar/SideBar";
 
 import {
@@ -11,8 +13,8 @@ import {
   ListProperties,
   SingleProperty,
 } from "./api/Factory";
-import console from "console";
-import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import React from "react";
 
 const factory = new PageFactory();
 
@@ -29,7 +31,8 @@ export const getServerSideProps = async (pageContext: {
   let data: any;
 
   if (variables.pageSlug[0] === "property") {
-    endpoint = `${variables.pageSlug[0]}/${variables.pageSlug[1]}/${variables.pageSlug[2]}`;
+    let pagination = variables.pageSlug[3] ? `/${variables.pageSlug[3]}` : '';
+    endpoint = `${variables.pageSlug[0]}/${variables.pageSlug[1]}/${variables.pageSlug[2]}${pagination}`;
     propertyPageType = factory.createPage(endpoint, PageType.ListProperties);
     data = await propertyPageType.data();
   } else if (variables.pageSlug[0] === "for-sale") {
@@ -49,10 +52,28 @@ export const getServerSideProps = async (pageContext: {
 
 const Crypto = (props: any) => {
   const { data } = props;
+  const router = useRouter();
+  const [page, setPage] = React.useState(1);
   //  const tableColsLength:number =  Object.keys(data[0]).length -1;
 
+  // const handleChange = (e) => {
+  //   e.preventDefault();
+  //   router.push(`${router.asPath}/${data[0].pagination.pageNumber}`);
+  // };
+
+  const handleChange = (e, value) => {
+    e.preventDefault();
+    setPage(value);
+    let q = {...router.query}; 
+    router.replace(`${q.slug[0]}/${q.slug[1]}/${q.slug[2]}/${value}`);
+  };
+
+  const pageCont = () => {
+    return Math.ceil(data[0].pagination.totalResults / 25);
+  };
+
   return (
-    <Grid container direction={"row"} sx={{ height: "100vh", p: 0 }}>
+    <Grid container direction={"row"} sx={{ height: "100vh", p: 0, pb: 4 }}>
       <Grid item sx={{ background: "#201D47", height: "100%", p: 4 }} lg={2}>
         <Box>
           <SideBar />
@@ -60,25 +81,29 @@ const Crypto = (props: any) => {
       </Grid>
       <Grid item sx={{ background: "#17163B", height: "auto", p: 4 }} lg={10}>
         <Box sx={{ background: "#17163B", height: "100%" }}>
-          <div>
+          {/* <div>
             <pre>{JSON.stringify(data, null, 2)}</pre>
-          </div>
-          ;
-          {/* {data.map((d: any, index:number) => (
-            <Link key={d.listingId} href={d.listingUris.detail}>
+          </div> */}
+          {data[0].listings.regular.map((d: any, index: number) => (
             <PriceBlock
-              flag={d.flag}
+              key={index}
               title={d.title}
-              description={d.address}
+              image={d.image}
+              flag={d.flag}
+              publishedOn={d.publishedOn}
+              priceTitle={d.priceTitle}
               price={d.price}
-              priceType={d.priceTitle}
-              image={d.image.src}
-              published={d.publishedOn}
+              address={d.address}
               otherPropertyImages={d.otherPropertyImages}
+              listingUris={d.listingUris}
+              listingId={d.listingId}
             />
-            </Link>
-          ))} */}
+          ))}
         </Box>
+
+        <Stack spacing={2} sx={{pb: 2, mb: 2}}>
+          <Pagination count={pageCont()} page={page} onChange={handleChange} color="secondary"/>
+        </Stack>
       </Grid>
     </Grid>
   );

@@ -3,29 +3,31 @@ import CardMedia from "@mui/material/CardMedia";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Stack";
+import Link from "@mui/material/Link";
 import { useRef } from "react";
-import { Slide } from 'react-slideshow-image';
-import 'react-slideshow-image/dist/styles.css'
+import { Slide } from "react-slideshow-image";
+// import "react-slideshow-image/dist/styles.css";
+import { PropertiesProp } from "../../interfaces/IProperty";
 
-interface PropertyListing {
-  title: string;
-  description: string;
-  price: string;
-  priceType: string;
-  image: string;
-  published: string;
-  flag: string;
-  otherPropertyImages: any;
-}
-
-const PriceBlock = (props: PropertyListing) => {
-
+const PriceBlock = (props: PropertiesProp) => {
   const slideRef = useRef();
-  const { title, description, price, priceType, image, published, flag, otherPropertyImages } = props;
+  const {
+    title,
+    address,
+    price,
+    priceTitle,
+    image,
+    publishedOn,
+    flag,
+    otherPropertyImages,
+    listingId,
+    listingUris
+
+  } = props;
 
   const properties = {
     autoplay: false,
-    arrows: true
+    arrows: true,
   };
   return (
     <Box
@@ -43,47 +45,65 @@ const PriceBlock = (props: PropertyListing) => {
       }}
     >
       <Box
-        sx={{ display: "flex", flexDirection: "row", position:'relative', justifyContent: 'space-between' }}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          position: "relative",
+          justifyContent: "space-between",
+        }}
       >
-        <Box
-        sx={{ position:'relative', width: '40%', height: '100%'}}
-      >
-        <Chip label={flag} color="primary" sx={{position: 'absolute', top: 1, left: 1, background: 'orange'}}/>
-        <CardMedia
-          component="img"
-          image={image}
-          alt={title}
-          sx={{ top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%", zIndex: 0, objectFit: 'cover'}}
-        />
-        <Typography sx={{pt: 1}}>Listed on {published}</Typography>
+        <Box sx={{ position: "relative", width: "40%", height: "100%" }}>
+          <Chip
+            label={flag}
+            color="primary"
+            sx={{ position: "absolute", top: 1, left: 1, background: "orange" }}
+          />
+          <Link key={listingId} href={listingUris.detail}>
+          <CardMedia
+            component="img"
+            image={image.src}
+            alt={title}
+            sx={{
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 0,
+              objectFit: "cover",
+            }}
+          />
+          </Link>
+          <Typography sx={{ pt: 1 }}>Listed on {publishedOn}</Typography>
         </Box>
-        <Box sx={{p: 3, flex: 1 }}>
-       {priceType && (<Typography>{priceType}</Typography> ) }
-        <Typography>{price}</Typography>
-        <Typography variant="h2" component="h2">{title}</Typography>
+        <Box sx={{ p: 3, flex: 1 }}>
+          {priceTitle && <Typography>{priceTitle}</Typography>}
+          <Typography>{price}</Typography>
+          <Typography component="h2">{title}</Typography>
 
-        
-
-        <Typography variant="h4" component="h4">{description}</Typography>
-
-        
-        
+          <Typography component="h4">{address}</Typography>
         </Box>
-        <Box sx={{ width: '30%', alignSelf: 'center'}}>
-      <div className="slide-container" style={{width: '350px'}}>
-      <Slide ref={slideRef} {...properties}>
-         {otherPropertyImages.map((slideImage: { small: any; caption: any; }, index: any)=> (
-            <div className="each-slide" key={index}>
-              <div style={{'backgroundImage': `url(${slideImage.small})`,height:'250px', width: 'auto'}}>
-                <span>{slideImage.caption}</span>
-              </div>
-            </div>
-          ))} 
-        </Slide>
-      </div>
+        <Box sx={{ width: "30%", alignSelf: "center" }}>
+          <div className="slide-container" style={{ width: "350px" }}>
+            <Slide ref={slideRef} {...properties}>
+              {otherPropertyImages.map((slideImage, index) => (
+                <div className="each-slide" key={index}>
+                  <div
+                    style={{
+                      backgroundImage: `url(${slideImage.small})`,
+                      height: "250px",
+                      width: "auto",
+                    }}
+                  >
+                    <span>{slideImage.caption}</span>
+                  </div>
+                </div>
+              ))}
+            </Slide>
+          </div>
+        </Box>
       </Box>
-      </Box>
-
     </Box>
   );
 };

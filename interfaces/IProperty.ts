@@ -59,32 +59,32 @@ export interface ListingUris {
     detail: string;
 }
 
-export interface RootObject {
-    __typename: string;
-    numberOfVideos: number;
-    numberOfImages: number;
-    numberOfFloorPlans: number;
-    numberOfViews: number;
-    listingId: string;
-    title: string;
-    publishedOnLabel: string;
-    publishedOn: string;
-    availableFrom: string;
-    priceDrop: PriceDrop;
-    isPremium: boolean;
-    highlights: any[];
-    otherPropertyImages: OtherPropertyImage[];
-    branch: Branch;
-    features: Feature[];
+export interface PropertiesProp {
+    __typename?: string;
+    numberOfVideos?: number;
+    numberOfImages?: number;
+    numberOfFloorPlans?: number;
+    numberOfViews?: number;
+    listingId?: string;
+    title?: string;
+    publishedOnLabel?: string;
+    publishedOn?: string;
+    availableFrom?: string;
+    priceDrop?: PriceDrop;
+    isPremium?: boolean;
+    highlights?: any[];
+    otherPropertyImages?: OtherPropertyImage[];
+    branch?: Branch;
+    features?: Feature[];
     image: Image;
-    transports: Transport[];
+    transports?: Transport[];
     flag: string;
     priceTitle: string;
     price: string;
     alternativeRentFrequencyLabel?: any;
     address: string;
-    tags: any[];
-    listingUris: ListingUris;
+    tags?: any[];
+    listingUris?: ListingUris;
 }
 
 

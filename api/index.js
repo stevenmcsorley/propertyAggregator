@@ -73,7 +73,7 @@ const exchanges = [
     endpoint: [
       {
         id: 'property',
-        url: '/?beds_min=2&page_size=25&price_max=230000&property_sub_type=semi_detached&property_sub_type=flats&property_sub_type=detached&property_sub_type=terraced&property_sub_type=bungalow&view_type=list&results_sort=newest_listings&search_source=refine"'
+        url: '/?beds_min=2&page_size=25&price_max=230000&property_sub_type=semi_detached&property_sub_type=flats&property_sub_type=detached&property_sub_type=terraced&property_sub_type=bungalow&view_type=list&results_sort=newest_listings&search_source=refine'
       },
       {
         id: 'details',
@@ -93,7 +93,7 @@ async function getProperties(res, page_type) {
   let test = JSON.parse(x)
     
       if(page_type === 'property'){
-      listingsInfo = test.props.pageProps.initialProps.searchResults.listings.regular
+      listingsInfo = [test.props.pageProps.initialProps.searchResults]
       } else if (page_type === 'details'){
       listingsInfo = [test.props.pageProps]
       } else {
@@ -115,10 +115,12 @@ async function getCryptoInfo(cherrioFunction, endpoint, page_type) {
 
 async function exchangeSwap(req, res) {
   let source;
-  let pageTypeId, exchangeId;
+  let pageTypeId, exchangeId, pageNumber;
   pageTypeId = req.params.pageTypeId
   exchangeId = req.params.exchangeId;
   const searchId = req.params.searchId;
+  pageNumber = req.params.page;
+  console.log(pageNumber)
 
 
   if(pageTypeId !== 'property'){
@@ -139,7 +141,7 @@ async function exchangeSwap(req, res) {
     });
 
     if(pageTypeId === 'property'){
-      source = `${pageTerms[0].baseUrl}${pageTypeId}/${pageTerms[0].searchTerm}${pageTerms[0].pageType}`
+      source = `${pageTerms[0].baseUrl}${pageTypeId}/${pageTerms[0].searchTerm}${pageTerms[0].pageType}${pageNumber !== undefined ? `&pn=${pageNumber}` : ''}`
 
     } else if(pageTypeId === 'details'){
       source = `${pageTerms[0].baseUrl}${pageTypeId}/${pageTerms[0].searchTerm}`
@@ -164,5 +166,5 @@ app.get("/crypto/:exchangeId/:endpointId", exchangeSwap);
 //          for-sale    details     id
 app.get("/:pageTypeId/:exchangeId/:searchId", exchangeSwap);
 // app.get("/property/:exchangeId/:endpointId", exchangeSwap);
-
+app.get("/:pageTypeId/:exchangeId/:searchId/:page", exchangeSwap);
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));

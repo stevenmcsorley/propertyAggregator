@@ -5,7 +5,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import PriceBlock from './PriceBlock';
-import priceblockData from './PriceBlock.testdata';
+import {priceblockData} from './PriceBlock.testdata';
 
 //👇 This default export determines where your story goes in the story list
 export default {

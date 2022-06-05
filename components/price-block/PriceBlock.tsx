@@ -21,8 +21,7 @@ const PriceBlock = (props: PropertiesProp) => {
     flag,
     otherPropertyImages,
     listingId,
-    listingUris
-
+    listingUris,
   } = props;
 
   const properties = {
@@ -53,27 +52,34 @@ const PriceBlock = (props: PropertiesProp) => {
         }}
       >
         <Box sx={{ position: "relative", width: "40%", height: "100%" }}>
-          <Chip
-            label={flag}
-            color="primary"
-            sx={{ position: "absolute", top: 1, left: 1, background: "orange" }}
-          />
+          {flag && (
+            <Chip
+              label={flag}
+              color="primary"
+              sx={{
+                position: "absolute",
+                top: 1,
+                left: 1,
+                background: "orange",
+              }}
+            />
+          )}
           <Link key={listingId} href={listingUris.detail}>
-          <CardMedia
-            component="img"
-            image={image.src}
-            alt={title}
-            sx={{
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: 0,
-              objectFit: "cover",
-            }}
-          />
+            <CardMedia
+              component="img"
+              image={image.src}
+              alt={title}
+              sx={{
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: 0,
+                objectFit: "cover",
+              }}
+            />
           </Link>
           <Typography sx={{ pt: 1 }}>Listed on {publishedOn}</Typography>
         </Box>

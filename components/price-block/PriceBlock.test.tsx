@@ -15,13 +15,15 @@ describe("Price Block", () => {
       price={priceblockData[0].price}
       address={priceblockData[0].address}
       otherPropertyImages={priceblockData[0].otherPropertyImages}
+      listingUris={priceblockData[0].listingUris}
+      listingId={priceblockData[0].listingId}
     />
     );
 
-    expect(getByText("3 bed semi-detached house for sale")).toBeVisible();
-    expect(getByText("Just added")).toBeVisible();
-    expect(getByText("30th May 2022")).toBeVisible();
-    expect(getByText("Offers over")).toBeVisible();
-    expect(getByText("£180,000")).toBeVisible();
+    expect(getByText("3 bed semi-detached house for sale")).toBeInTheDocument();
+    expect(getByText("Just added")).toBeInTheDocument();
+    expect(getByText("Listed on 30th May 2022")).toBeInTheDocument();
+    expect(getByText("Offers over")).toBeInTheDocument();
+    expect(getByText("£180,000")).toBeInTheDocument();
   });
 });
